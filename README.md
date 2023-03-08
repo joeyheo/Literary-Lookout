@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/joeyheo/Literary-Lookout">
-    <img src="https://github.com/joeyheo/Literary-Lookout/blob/main/src/logo/Text_White.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/joeyheo/Literary-Lookout/blob/main/src/logo/Text_White.png" alt="Logo" width="100" height="40">
   </a>
 
   <h3 align="center">Literary Lookout</h3>
