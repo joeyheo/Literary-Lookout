@@ -235,7 +235,7 @@ function Navbar() {
                   fontSize={"sm"}
                   fontWeight={600}
                   variant={"outline"}
-                  href={"#"}
+                  href={""}
                   leftIcon={<FcGoogle />}
                 >
                   <Center>
