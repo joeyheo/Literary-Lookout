@@ -7,13 +7,19 @@ import {
   Stack,
   Collapse,
   Icon,
-  Link,
   Popover,
   PopoverTrigger,
   PopoverContent,
   useColorModeValue,
   Image,
   useDisclosure,
+  Center,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -21,10 +27,134 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
+
 import logo from "../logo/Text_Black.png";
+import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { CustomToast } from "./toast/toast";
+import { Link } from "react-router-dom";
+
+//Firebase Imports
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { auth, db } from "../firebase/firebaseConfig";
+
+import {
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  doc,
+  where,
+  setDoc,
+} from "firebase/firestore";
+const provider = new GoogleAuthProvider();
 
 function Navbar() {
+  const { addToast } = CustomToast();
+  const [isLogin, setisLogin] = useState(false);
+  const [userInfo, setuserInfo] = useState([]);
+
+  const handleLogin = () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        // User Information
+        const user = result.user;
+
+        // Database Handler
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("id", "==", user.uid));
+        const docs = await getDocs(q);
+
+        // Checks if the user is already added to the db
+        if (docs.docs.length === 0) {
+          // User has not been found in the database before
+          const data = {
+            id: user.uid,
+            name: user.displayName,
+            authProvider: "Google",
+            email: user.email,
+            createdAt: serverTimestamp(),
+            isAdmin: false,
+          };
+          await setDoc(doc(db, "users", user.uid), data)
+            .then(() => {
+              // New User has been added to the database
+              addToast({
+                message: "Account created.",
+                type: "success",
+              });
+              setisLogin(true);
+              sessionStorage.setItem("userInfo", JSON.stringify(user));
+              setuserInfo(
+                JSON.parse(sessionStorage.getItem("userInfo") || "{}")
+              );
+            })
+            .catch((error) => {
+              console.log("error", error);
+              setisLogin(false);
+              addToast({
+                message: error,
+                type: "error",
+              });
+            });
+        }
+
+        if (isLogin === true) {
+          //Already displayed account created.
+        } else {
+          setisLogin(true);
+          addToast({
+            message: "Logged In.",
+            type: "success",
+          });
+          sessionStorage.setItem("userInfo", JSON.stringify(user));
+          setuserInfo(JSON.parse(sessionStorage.getItem("userInfo") || "{}"));
+          // console.log((userInfo as any).photoURL); // 프로필 사진 URL
+          // console.log((userInfo as any).phoneNumber); // 휴대폰 번호
+          // console.log((userInfo as any).metadata); // 사용자 메타데이터(createdAt, creationTime, lastLoginAt, lastSignInTime)
+          // console.log((userInfo as any).email); // 이메일
+          // console.log((userInfo as any).displayName); // 표시 이름
+          // console.log((userInfo as any).emailVerified); // 이메일 인증 여부(boolean)
+          // console.log((userInfo as any).isAnonymous); // 익명 여부(boolean)
+        }
+      })
+      .catch((error) => {
+        // Handle Errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode);
+        console.log(errorMessage);
+        console.log(credential);
+
+        setisLogin(false);
+        addToast({
+          message: errorMessage,
+          type: "error",
+        });
+      });
+  };
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        setisLogin(false);
+        addToast({
+          message: "Logged out.",
+          type: "success",
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        addToast({
+          message: error,
+          type: "error",
+        });
+      });
+  };
   const { isOpen, onToggle } = useDisclosure();
+
   return (
     <>
       <Box>
@@ -59,8 +189,7 @@ function Navbar() {
           </Flex>
           <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
             <Image w={"100px"} src={logo}></Image>
-
-            <Flex display={{ base: "none", md: "flex" }} ml={10}>
+            <Flex display={{ base: "none", md: "flex" }} ml={10} mt={2}>
               <DesktopNav />
             </Flex>
           </Flex>
@@ -71,29 +200,50 @@ function Navbar() {
             direction={"row"}
             spacing={6}
           >
-            <Button
-              as={"a"}
-              fontSize={"sm"}
-              fontWeight={400}
-              variant={"link"}
-              href={"#"}
-            >
-              Sign In
-            </Button>
-            <Button
-              as={"a"}
-              display={{ base: "none", md: "inline-flex" }}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"pink.400"}
-              href={"#"}
-              _hover={{
-                bg: "pink.300",
-              }}
-            >
-              Sign Up
-            </Button>
+            {isLogin ? (
+              <>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
+                    <Avatar size={"sm"} src={(userInfo as any).photoURL} />
+                  </MenuButton>
+                  <MenuList alignItems={"center"}>
+                    <br />
+                    <Center>
+                      <Avatar size={"2xl"} src={(userInfo as any).photoURL} />
+                    </Center>
+                    <Center>
+                      <b>{(userInfo as any).displayName}</b>
+                    </Center>
+                    <MenuDivider />
+                    <MenuItem>Your Community</MenuItem>
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={handleLogin}
+                  as={"a"}
+                  fontSize={"sm"}
+                  fontWeight={600}
+                  variant={"outline"}
+                  href={"#"}
+                  leftIcon={<FcGoogle />}
+                >
+                  <Center>
+                    <Text>Login</Text>
+                  </Center>
+                </Button>
+              </>
+            )}
           </Stack>
         </Flex>
 
@@ -106,7 +256,7 @@ function Navbar() {
 }
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
-  const linkHoverColor = useColorModeValue("gray.800", "white");
+  // const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
   return (
@@ -116,17 +266,19 @@ const DesktopNav = () => {
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
               <Link
-                p={2}
-                href={navItem.href ?? "#"}
-                fontSize={"sm"}
-                fontWeight={500}
+                // p={2}
+                to={navItem.href ?? "#"}
+                // fontSize={"sm"}
+                // fontWeight={500}
                 color={linkColor}
-                _hover={{
-                  textDecoration: "none",
-                  color: linkHoverColor,
-                }}
+                // _hover={{
+                //   textDecoration: "none",
+                //   color: linkHoverColor,
+                // }}
               >
-                {navItem.label}
+                <Text _hover={{ color: "green.400" }} fontWeight={500}>
+                  {navItem.label}
+                </Text>
               </Link>
             </PopoverTrigger>
 
@@ -156,18 +308,18 @@ const DesktopNav = () => {
 const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
   return (
     <Link
-      href={href}
+      to={href!}
       role={"group"}
-      display={"block"}
-      p={2}
-      rounded={"md"}
-      _hover={{ bg: useColorModeValue("pink.50", "gray.900") }}
+      // display={"block"}
+      // p={2}
+      // rounded={"md"}
+      // _hover={{ bg: useColorModeValue("green.50", "green.900") }}
     >
       <Stack direction={"row"} align={"center"}>
         <Box>
           <Text
             transition={"all .3s ease"}
-            _groupHover={{ color: "pink.400" }}
+            _groupHover={{ color: "green.400" }}
             fontWeight={500}
           >
             {label}
@@ -183,7 +335,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
           align={"center"}
           flex={1}
         >
-          <Icon color={"pink.400"} w={5} h={5} as={ChevronRightIcon} />
+          <Icon color={"green.400"} w={5} h={5} as={ChevronRightIcon} />
         </Flex>
       </Stack>
     </Link>
@@ -212,7 +364,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
       <Flex
         py={2}
         as={Link}
-        href={href ?? "#"}
+        to={href ?? "#"}
         justify={"space-between"}
         align={"center"}
         _hover={{
@@ -247,7 +399,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         >
           {children &&
             children.map((child) => (
-              <Link key={child.label} py={2} href={child.href}>
+              <Link key={child.label} to={child.href!}>
                 {child.label}
               </Link>
             ))}
@@ -266,42 +418,27 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
-    label: "Inspiration",
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Suggestion",
+    href: "/suggestion",
+  },
+  {
+    label: "Community",
     children: [
       {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
-        href: "#",
+        label: "Review Wall",
+        subLabel: "Newest & Popular review from others",
+        href: "/reviewwall",
       },
       {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
-        href: "#",
+        label: "Community Wall",
+        subLabel: "Only for avid readers",
+        href: "/communitywall",
       },
     ],
-  },
-  {
-    label: "Find Work",
-    children: [
-      {
-        label: "Job Board",
-        subLabel: "Find your dream design job",
-        href: "#",
-      },
-      {
-        label: "Freelance Projects",
-        subLabel: "An exclusive list for contract work",
-        href: "#",
-      },
-    ],
-  },
-  {
-    label: "Learn Design",
-    href: "#",
-  },
-  {
-    label: "Hire Designers",
-    href: "#",
   },
 ];
 export default Navbar;
