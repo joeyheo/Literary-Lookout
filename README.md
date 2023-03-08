@@ -30,23 +30,21 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="src/logo/App_logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/joeyheo/Literary-Lookout">
+    <img src="https://github.com/joeyheo/Literary-Lookout/blob/main/src/logo/Text_White.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Literary Lookout</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+   A platform that offers personalized book recommendations, curated reading lists, and a community for book lovers to connect and share their opinions, with the goal of inspiring a new generation of readers and fostering a lifelong love of reading.
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://literarylookout.com">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/joeyheo/Literary-Lookout/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/joeyheo/Literary-Lookout/issues">Request Feature</a>
   </p>
 </div>
 
