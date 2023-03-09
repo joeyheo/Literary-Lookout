@@ -31,7 +31,7 @@ import {
 
 import logo from "../logo/Text_Black.png";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomToast } from "./toast/toast";
 import { Link } from "react-router-dom";
 
@@ -57,6 +57,15 @@ function Navbar() {
     setSeed(Math.random());
   };
   const [userInfo, setuserInfo] = useState([]);
+
+  useEffect(() => {
+    // Having user data after refreshing
+    if (sessionStorage.getItem("userInfo") != null) {
+      setuserInfo(JSON.parse(sessionStorage.getItem("userInfo") || "{}"));
+    } else {
+      //There is no user Info
+    }
+  }, []);
 
   const handleLogin = (e: any) => {
     e.preventDefault();
