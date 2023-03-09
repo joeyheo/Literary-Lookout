@@ -51,7 +51,10 @@ const provider = new GoogleAuthProvider();
 
 function Navbar() {
   const { addToast } = CustomToast();
-  const [isLogin, setisLogin] = useState(false);
+  const [seed, setSeed] = useState(1);
+  const reset = () => {
+    setSeed(Math.random());
+  };
   const [userInfo, setuserInfo] = useState([]);
 
   const handleLogin = () => {
@@ -65,57 +68,59 @@ function Navbar() {
         const q = query(usersRef, where("id", "==", user.uid));
         const docs = await getDocs(q);
 
-        // Checks if the user is already added to the db
-        if (docs.docs.length === 0) {
-          // User has not been found in the database before
-          const data = {
-            id: user.uid,
-            name: user.displayName,
-            authProvider: "Google",
-            email: user.email,
-            createdAt: serverTimestamp(),
-            isAdmin: false,
-          };
-          await setDoc(doc(db, "users", user.uid), data)
-            .then(() => {
-              // New User has been added to the database
-              addToast({
-                message: "Account created.",
-                type: "success",
+        if (user != null) {
+          // Checks if the user is already added to the db
+          if (docs.docs.length === 0) {
+            // User has not been found in the database before
+            const data = {
+              id: user.uid,
+              name: user.displayName,
+              authProvider: "Google",
+              email: user.email,
+              createdAt: serverTimestamp(),
+              isAdmin: false,
+            };
+            await setDoc(doc(db, "users", user.uid), data)
+              .then(() => {
+                // New User has been added to the database
+                addToast({
+                  message: "Account created.",
+                  type: "success",
+                });
+                sessionStorage.setItem("isLogin", "true");
+                sessionStorage.setItem("userInfo", JSON.stringify(user));
+                setuserInfo(
+                  JSON.parse(sessionStorage.getItem("userInfo") || "{}")
+                );
+              })
+              .catch((error) => {
+                console.log("error", error);
+                sessionStorage.setItem("isLogin", "true");
+                addToast({
+                  message: error,
+                  type: "error",
+                });
               });
-              setisLogin(true);
-              sessionStorage.setItem("userInfo", JSON.stringify(user));
-              setuserInfo(
-                JSON.parse(sessionStorage.getItem("userInfo") || "{}")
-              );
-            })
-            .catch((error) => {
-              console.log("error", error);
-              setisLogin(false);
-              addToast({
-                message: error,
-                type: "error",
-              });
+          }
+          if (sessionStorage.getItem("isLogin") === "true") {
+            //Already displayed account created.
+            console.log(sessionStorage.getItem("isLogin"));
+          } else {
+            sessionStorage.setItem("isLogin", "true");
+            addToast({
+              message: "Logged In.",
+              type: "success",
             });
-        }
-
-        if (isLogin === true) {
-          //Already displayed account created.
-        } else {
-          setisLogin(true);
-          addToast({
-            message: "Logged In.",
-            type: "success",
-          });
-          sessionStorage.setItem("userInfo", JSON.stringify(user));
-          setuserInfo(JSON.parse(sessionStorage.getItem("userInfo") || "{}"));
-          // console.log((userInfo as any).photoURL); // 프로필 사진 URL
-          // console.log((userInfo as any).phoneNumber); // 휴대폰 번호
-          // console.log((userInfo as any).metadata); // 사용자 메타데이터(createdAt, creationTime, lastLoginAt, lastSignInTime)
-          // console.log((userInfo as any).email); // 이메일
-          // console.log((userInfo as any).displayName); // 표시 이름
-          // console.log((userInfo as any).emailVerified); // 이메일 인증 여부(boolean)
-          // console.log((userInfo as any).isAnonymous); // 익명 여부(boolean)
+            sessionStorage.setItem("userInfo", JSON.stringify(user));
+            setuserInfo(JSON.parse(sessionStorage.getItem("userInfo") || "{}"));
+            // // console.log((userInfo as any).photoURL); // 프로필 사진 URL
+            // // console.log((userInfo as any).phoneNumber); // 휴대폰 번호
+            // // console.log((userInfo as any).metadata); // 사용자 메타데이터(createdAt, creationTime, lastLoginAt, lastSignInTime)
+            // // console.log((userInfo as any).email); // 이메일
+            // // console.log((userInfo as any).displayName); // 표시 이름
+            // // console.log((userInfo as any).emailVerified); // 이메일 인증 여부(boolean)
+            // // console.log((userInfo as any).isAnonymous); // 익명 여부(boolean)
+          }
         }
       })
       .catch((error) => {
@@ -127,8 +132,8 @@ function Navbar() {
         console.log(errorCode);
         console.log(errorMessage);
         console.log(credential);
-
-        setisLogin(false);
+        console.log("it is this error");
+        sessionStorage.setItem("isLogin", "false");
         addToast({
           message: errorMessage,
           type: "error",
@@ -139,7 +144,8 @@ function Navbar() {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setisLogin(false);
+        sessionStorage.setItem("isLogin", "false");
+        reset();
         addToast({
           message: "Logged out.",
           type: "success",
@@ -154,10 +160,10 @@ function Navbar() {
       });
   };
   const { isOpen, onToggle } = useDisclosure();
-
+  const linkColor = useColorModeValue("gray.600", "gray.200");
   return (
     <>
-      <Box>
+      <Box key={seed}>
         <Flex
           bg={useColorModeValue("white", "gray.800")}
           color={useColorModeValue("gray.600", "white")}
@@ -188,7 +194,19 @@ function Navbar() {
             />
           </Flex>
           <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-            <Image w={"100px"} src={logo}></Image>
+            <Link
+              // p={2}
+              to={"/"}
+              // fontSize={"sm"}
+              // fontWeight={500}
+              color={linkColor}
+              // _hover={{
+              //   textDecoration: "none",
+              //   color: linkHoverColor,
+              // }}
+            >
+              <Image w={"100px"} src={logo}></Image>
+            </Link>
             <Flex display={{ base: "none", md: "flex" }} ml={10} mt={2}>
               <DesktopNav />
             </Flex>
@@ -200,7 +218,7 @@ function Navbar() {
             direction={"row"}
             spacing={6}
           >
-            {isLogin ? (
+            {sessionStorage.getItem("isLogin") === "true" ? (
               <>
                 <Menu>
                   <MenuButton
@@ -235,7 +253,7 @@ function Navbar() {
                   fontSize={"sm"}
                   fontWeight={600}
                   variant={"outline"}
-                  href={""}
+                  href={"#login"}
                   leftIcon={<FcGoogle />}
                 >
                   <Center>
@@ -417,10 +435,6 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: "Home",
-    href: "/",
-  },
   {
     label: "Suggestion",
     href: "/suggestion",
