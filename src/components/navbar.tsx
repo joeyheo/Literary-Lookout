@@ -19,6 +19,7 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
+  Divider,
   MenuList,
 } from "@chakra-ui/react";
 import {
@@ -57,7 +58,8 @@ function Navbar() {
   };
   const [userInfo, setuserInfo] = useState([]);
 
-  const handleLogin = () => {
+  const handleLogin = (e: any) => {
+    e.preventDefault();
     signInWithPopup(auth, provider)
       .then(async (result) => {
         // User Information
@@ -95,7 +97,7 @@ function Navbar() {
               })
               .catch((error) => {
                 console.log("error", error);
-                sessionStorage.setItem("isLogin", "true");
+                sessionStorage.setItem("isLogin", "false");
                 addToast({
                   message: error,
                   type: "error",
@@ -113,17 +115,11 @@ function Navbar() {
             });
             sessionStorage.setItem("userInfo", JSON.stringify(user));
             setuserInfo(JSON.parse(sessionStorage.getItem("userInfo") || "{}"));
-            // // console.log((userInfo as any).photoURL); // 프로필 사진 URL
-            // // console.log((userInfo as any).phoneNumber); // 휴대폰 번호
-            // // console.log((userInfo as any).metadata); // 사용자 메타데이터(createdAt, creationTime, lastLoginAt, lastSignInTime)
-            // // console.log((userInfo as any).email); // 이메일
-            // // console.log((userInfo as any).displayName); // 표시 이름
-            // // console.log((userInfo as any).emailVerified); // 이메일 인증 여부(boolean)
-            // // console.log((userInfo as any).isAnonymous); // 익명 여부(boolean)
           }
         }
       })
       .catch((error) => {
+        console.log("error", error);
         // Handle Errors
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -132,7 +128,6 @@ function Navbar() {
         console.log(errorCode);
         console.log(errorMessage);
         console.log(credential);
-        console.log("it is this error");
         sessionStorage.setItem("isLogin", "false");
         addToast({
           message: errorMessage,
@@ -141,7 +136,7 @@ function Navbar() {
       });
   };
 
-  const handleLogout = () => {
+  const handleLogout = (val: EventTarget) => {
     signOut(auth)
       .then(() => {
         sessionStorage.setItem("isLogin", "false");
@@ -194,17 +189,7 @@ function Navbar() {
             />
           </Flex>
           <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-            <Link
-              // p={2}
-              to={"/"}
-              // fontSize={"sm"}
-              // fontWeight={500}
-              color={linkColor}
-              // _hover={{
-              //   textDecoration: "none",
-              //   color: linkHoverColor,
-              // }}
-            >
+            <Link to={"/"} color={linkColor}>
               <Image w={"100px"} src={logo}></Image>
             </Link>
             <Flex display={{ base: "none", md: "flex" }} ml={10} mt={2}>
@@ -241,7 +226,9 @@ function Navbar() {
                     <MenuDivider />
                     <MenuItem>Your Community</MenuItem>
                     <MenuItem>Account Settings</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem onClick={(e) => handleLogout(e.target)}>
+                      Logout
+                    </MenuItem>
                   </MenuList>
                 </Menu>
               </>
@@ -274,7 +261,6 @@ function Navbar() {
 }
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
-  // const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
   return (
@@ -283,17 +269,7 @@ const DesktopNav = () => {
         <Box key={navItem.label}>
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
-              <Link
-                // p={2}
-                to={navItem.href ?? "#"}
-                // fontSize={"sm"}
-                // fontWeight={500}
-                color={linkColor}
-                // _hover={{
-                //   textDecoration: "none",
-                //   color: linkHoverColor,
-                // }}
-              >
+              <Link to={navItem.href ?? "#"} color={linkColor}>
                 <Text _hover={{ color: "green.400" }} fontWeight={500}>
                   {navItem.label}
                 </Text>
@@ -325,14 +301,7 @@ const DesktopNav = () => {
 
 const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
   return (
-    <Link
-      to={href!}
-      role={"group"}
-      // display={"block"}
-      // p={2}
-      // rounded={"md"}
-      // _hover={{ bg: useColorModeValue("green.50", "green.900") }}
-    >
+    <Link to={href!} role={"group"}>
       <Stack direction={"row"} align={"center"}>
         <Box>
           <Text
@@ -370,6 +339,7 @@ const MobileNav = () => {
       {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
+      <Divider />
     </Stack>
   );
 };
