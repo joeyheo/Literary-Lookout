@@ -2,6 +2,8 @@
   "name": "literary-lookout",
   "version": "0.1.0",
   "private": true,
+  "author": "Joey Heo",
+  "license": "MIT",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
