@@ -1,0 +1,33 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "JSON", "HTML", "CSS", "JavaScript", "JSON with Comments", "Markdown", "comment", "blank", "total"
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 102, 16, 34, 152
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/asset-manifest.json", "JSON", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 13
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/index.html", "HTML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/manifest.json", "JSON", 0, 0, 25, 0, 0, 0, 0, 0, 0, 1, 26
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/static/css/main.4efb37a3.css", "CSS", 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/static/js/27.1af904be.chunk.js", "JavaScript", 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/build/static/js/main.21286458.js", "JavaScript", 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 2
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/firebase.json", "JSON", 0, 0, 10, 0, 0, 0, 0, 0, 11, 0, 21
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/package-lock.json", "JSON", 0, 0, 33349, 0, 0, 0, 0, 0, 0, 1, 33350
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/package.json", "JSON", 0, 0, 55, 0, 0, 0, 0, 0, 0, 1, 56
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/public/index.html", "HTML", 0, 0, 0, 20, 0, 0, 0, 0, 23, 1, 44
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/public/manifest.json", "JSON", 0, 0, 25, 0, 0, 0, 0, 0, 0, 1, 26
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/App.css", "CSS", 0, 0, 0, 0, 33, 0, 0, 0, 0, 6, 39
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/App.test.tsx", "TypeScript JSX", 0, 8, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/App.tsx", "TypeScript JSX", 0, 25, 0, 0, 0, 0, 0, 0, 1, 4, 30
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/404.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/books/books.tsx", "TypeScript JSX", 0, 128, 0, 0, 0, 0, 0, 0, 0, 6, 134
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/community/communitywall.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/community/reviewwall.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/home.tsx", "TypeScript JSX", 0, 47, 0, 0, 0, 0, 0, 0, 5, 5, 57
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/navbar.tsx", "TypeScript JSX", 0, 405, 0, 0, 0, 0, 0, 0, 12, 21, 438
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/searchbar.tsx", "TypeScript JSX", 0, 314, 0, 0, 0, 0, 0, 0, 0, 31, 345
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/suggestion/suggestion.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/components/toast/toast.tsx", "TypeScript JSX", 0, 14, 0, 0, 0, 0, 0, 0, 1, 4, 19
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/firebase/firebaseConfig.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 0, 0, 0, 6, 4, 30
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/index.css", "CSS", 0, 0, 0, 0, 12, 0, 0, 0, 0, 2, 14
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/index.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 0, 0, 0, 3, 5, 28
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/react-app-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/reportWebVitals.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/src/setupTests.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 0, 4, 1, 6
+"/Users/joeyheo/Documents/GitHub/Literary-Lookout/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 0, 26, 0, 0, 1, 27
+"Total", "-", 14, 1017, 33477, 21, 46, 2, 26, 102, 84, 147, 34936
